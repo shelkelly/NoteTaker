@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(__dirname));
 
-//require("./public/assets/js/index.js");
+require("./public/assets/js/index.js");
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
