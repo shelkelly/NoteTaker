@@ -10,13 +10,13 @@ module.exports = function (app) {
     //INDEX 
     //HTML GET
     app.get("*", function (req, res) {
-        res.sendFile(path.join(__dirname, "index.html"));
+        res.sendFile(path.join(__dirname, "./public/index.html"));
     });
 
     //NOTES GET
     //HTML GET
     app.get("/notes", function (req, res) {
-        res.sendFile(path.join(__dirname, "notes.html"))
+        res.sendFile(path.join(__dirname, "./public/notes.html"))
     });
     //RETRIEVE JSON & POST JSON
     app.get("/api/notes", function (req, res) {
