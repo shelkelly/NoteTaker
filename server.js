@@ -2,64 +2,75 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { notStrictEqual } = require("assert");
 
-// CREATES REUSABLE VARIABLE FOR db.json CONTENTS
-fs.readFile("db/db.json", (err, data) => {
-    if (err) throw err;
-    notedb = JSON.parse(data);
-    console.log(notedb);
+// set up express app
+const app = express();
+const PORT = process.env.PORT || 3005;
 
+// express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(__dirname));
 
+//require("./public/assets/js/index.js");
 
-    // set up express app
-    const app = express();
-    const PORT = process.env.PORT || 3005;
-    app.use(express.static(__dirname));
+app.listen(PORT, function () {
+    console.log("App listening on PORT " + PORT);
+});
 
-    app.listen(PORT, function () {
-        console.log("App listening on PORT " + PORT);
-    });
+module.exports = function (app) {
+    //API GET Requests
+    //When user visits a page, they will be shown the html and the data required.
 
-    // express app to handle data parsing
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
-    app.use(express.static(__dirname));
-
-    // HTML ROUTES
-
+    //INDEX 
+    //HTML GET
     app.get("*", function (req, res) {
         res.sendFile(path.join(__dirname, "index.html"));
     });
 
+    //NOTES GET
+    //HTML GET
     app.get("/notes", function (req, res) {
-        res.sendFile(path.join(__dirname, "notes.html"));
+        res.sendFile(path.join(__dirname, "notes.html"))
     });
-
-    // API ROUTES
+    //RETRIEVE JSON & POST JSON
     app.get("/api/notes", function (req, res) {
+        fs.readFile("./db/db.json");
+        notedb = JSON.parse(data);
         res.json(notedb);
     });
 
-    // CREATE NEW NOTE
-    app.post("/api/notes/:id", function (req, res) {
-        req.body.id = notedb.length;
-        notedb.push(req.body);
-        notedb = JSON.stringify(notedb);
-        fs.writeFile("db/db.json", notedb);
-        res.json(JSON.parse(notedb));
+    //POST NEW NOTE
+    app.post("/api/notes", function (req, res) {
+        var newNote = req.body;
+        fs.readFile("./db/db.json");
+        notedb = JSON.parse(data);
+        notedb.push(newNote);
+        updateDB();
     });
+
+    //GETS ID
+    app.get("/api/notes/:id", function (req, res) {
+        fs.readFile("./db/db.json");
+        notedb = JSON.parse(data);
+        res.json(notedb[req.params.id]);
+    })
 
     // DELETE NOTE
     app.delete("/api/notes/:id", function (req, res) {
-        notedb = fs.readFileSync("db/db.json");
-        notedb = JSON.parse(notedb);
-        notedb = notedb.filter(function (note) {
-            return note.id != req.params.id;
-        });
-        notedb = JSON.stringify(notedb);
-        fs.writeFile("db/db.json", notedb);
-        res.send(JSON.parse(notedb));
+        fs.readFile("./db/db.json");
+        notedb = JSON.parse(data);
+        notedb.splice(req.params.id, 1);
+        updateDB();
     });
 
-});
+    //Update DB function to update the json when a note is added or deleted
+    function updateDB() {
+        fs.writeFile("./db/db.json", JSON.stringify(notedb, '\t'), err => {
+            if (err) throw err;
+            return true;
+        });
+    };
 
+};
