@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(__dirname));
 
-require('./public/assets/js/functioning.js')(app);
+require('./public/functioning.js')(app);
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
