@@ -1,16 +1,3 @@
-const express = require("express");
-const path = require("path");
-const fs = require("fs");
-
-const app = express();
-
-const PORT = process.env.PORT || 9001;
-
-//  Initialize notesData
-
-let notesData = [];
-/// above are my consts
-
 const $noteTitle = $(".note-title");
 const $noteText = $(".note-textarea");
 const $saveNoteBtn = $(".save-note");
