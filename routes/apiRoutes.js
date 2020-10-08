@@ -1,11 +1,10 @@
-var noteData = require("db/db.json");
+var noteData = require("../db/db.json");
 console.log(noteData);
 
 module.exports = function (app) {
     // GET EXISTING NOTES
     app.get("/api/notes", function (req, res) {
-       var log = res.json(noteData);
-       console.log(log);
+       res.json(noteData);
     });
 
     //POST NEW NOTE
@@ -13,7 +12,6 @@ module.exports = function (app) {
         var newNote = req.body;
         noteData.push(newNote);
         updateDB();
-        return console.log("Note: " + newNote.title)
     });
 
     //GETS ID

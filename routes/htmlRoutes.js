@@ -1,9 +1,5 @@
-require('./routes/apiRoutes.js')(app);
-require('./routes/htmlRoutes.js')(app);
 
 var path = require("path");
-
-module.exports = function (app) {
 
     app.get("/", function (req, res) {
         res.sendFile(path.join(__dirname, "../public/index.html"));
@@ -14,4 +10,3 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, "../public/notes.html"))
     });
     
-};
